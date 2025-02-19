@@ -1,0 +1,1 @@
+mm_run.py 1r69 --platform OpenCL --steps 12000000 --reportFrequency 30000 --tempStart 300 --tempEnd 300 --device 2 -f forces_setup.py
