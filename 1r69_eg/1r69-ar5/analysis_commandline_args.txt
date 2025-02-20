@@ -1,0 +1,1 @@
+mm_analyze.py 1r69 -t /work/pw8/sl206/1r69_test_for_analysis/1r69-ar5/movie.dcd --subMode -1 -f forces_setup.py --fasta crystal_structure.fasta -c A
