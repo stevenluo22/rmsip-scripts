@@ -81,7 +81,7 @@ def run(args):
         plt.plot(times, rmsip_data, label=f"run {r}", marker='o')
 
     # Customize the plot
-    plt.title('RMSIP plot')
+    plt.title(args.figureTitle)
     plt.xlabel('Time')
     plt.ylabel('RMSIP')
     plt.xticks(rotation=90)  # Rotate x-axis labels for better readability
@@ -101,6 +101,7 @@ def main(args=None):
     parser.add_argument("-t", "--time", help="How long was the simulation?", default=400, type=float)
     parser.add_argument("-c", "--outputCSV", help="Name of csv output data file", default="RMSIP.csv", type=str)
     parser.add_argument("-o", "--outputplot", help="Name of output plot", default="RMSIP.jpg", type=str)
+    parser.add_argument("-f", "--figureTitle", help="output figure title", default="RMSIP plot", type=str)
 
     if args is None:
         args = parser.parse_args()
