@@ -20,6 +20,9 @@ def run(args):
 
     for name, simulation in simulationlist.items():
         # Load the trajectory
+        if args.addPrint:
+            print(f"Calculating RMSIP for {name}.")
+
         native = simulation["pdb"]
         movie = simulation["dcd"]
         u = mda.Universe(native, movie)  # Use "native.pdb" if needed
@@ -27,10 +30,7 @@ def run(args):
         atoms = u.select_atoms(selection)
         
         rmsip_data = []
-        
-        import MDAnalysis as mda
-        import numpy as np
-                    
+            
         # Split the trajectory into segments
         for ts in range(2, len(u.trajectory), frame_step):
             start = 2
@@ -63,8 +63,8 @@ def run(args):
             second_half_eigenvectors = second_half_pca_analysis.p_components[:, :n_components]
 
             rmsip = np.sqrt(np.sum(np.dot(first_half_eigenvectors.T, second_half_eigenvectors) ** 2) / n_components)
-            print(f"start: {start}, halfway: {half}, end: {end}")
-            print(rmsip)
+            if args.addPrint:
+                print(f"frame start analysis: {start}, halfway: {half}, end: {end}, RMSIP: {rmsip}")
             rmsip_data.append(rmsip)
         rmsip_values.append(rmsip_data)
 
@@ -72,7 +72,7 @@ def run(args):
 
     time = 0
     times = []
-    for i in range(1,len(u.trajectory)/frame_step+1):
+    for i in range(1, int(len(u.trajectory)/frame_step)+1):
         time += args.time/frame_step
         times.append(time)
 
@@ -102,9 +102,10 @@ def main(args=None):
     parser.add_argument("-c", "--components", help="How many top PCA components to use?", default=10, type=int)
     parser.add_argument("-s", "--interval", help="analysis interval in frames", default=20, type=int)
     parser.add_argument("-t", "--time", help="How long was the simulation?", default=400, type=float)
-    parser.add_argument("-c", "--outputCSV", help="Name of csv output data file", default="RMSIPs.csv", type=str)
+    parser.add_argument("-v", "--outputCSV", help="Name of csv output data file", default="RMSIPs.csv", type=str)
     parser.add_argument("-o", "--outputplot", help="Name of output plot", default="RMSIPs.jpg", type=str)
     parser.add_argument("-f", "--figureTitle", help="output figure title", default="RMSIP plot", type=str)
+    parser.add_argument("--addPrint", help="Add printing of the process", action="store_true", default=False)
 
     if args is None:
         args = parser.parse_args()
@@ -113,3 +114,6 @@ def main(args=None):
 
 
     run(args)
+
+if __name__=="__main__":
+    main()
