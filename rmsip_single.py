@@ -99,8 +99,8 @@ def main(args=None):
     parser.add_argument("-c", "--components", help="How many top PCA components to use?", default=10, type=int)
     parser.add_argument("-s", "--interval", help="analysis interval in frames", default=20, type=int)
     parser.add_argument("-t", "--time", help="How long was the simulation?", default=400, type=float)
-    parser.add_argument("-c", "--outputCSV", help="Name of csv output data file", default="RMSIPs.csv", type=str)
-    parser.add_argument("-o", "--outputplot", help="Name of output plot", default="RMSIPs.jpg", type=str)
+    parser.add_argument("-c", "--outputCSV", help="Name of csv output data file", default="RMSIP.csv", type=str)
+    parser.add_argument("-o", "--outputplot", help="Name of output plot", default="RMSIP.jpg", type=str)
 
     if args is None:
         args = parser.parse_args()
