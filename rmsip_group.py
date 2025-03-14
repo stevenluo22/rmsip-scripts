@@ -4,6 +4,8 @@ from MDAnalysis.analysis import align
 import numpy as np
 import argparse
 import importlib.util
+import matplotlib.pyplot as plt
+import csv
 
 def run(args):
     spec = importlib.util.spec_from_file_location("simulationlist", args.pythonlist)
@@ -16,7 +18,7 @@ def run(args):
     n_components = args.components  # Use top 10 eigenvectors
     frame_step = args.interval  # Analyze every 20 frames
 
-    rmsip_values = []
+    rmsip_values = {}
 
     for name, simulation in simulationlist.items():
         # Load the trajectory
@@ -66,9 +68,21 @@ def run(args):
             if args.addPrint:
                 print(f"frame start analysis: {start}, halfway: {half}, end: {end}, RMSIP: {rmsip}")
             rmsip_data.append(rmsip)
-        rmsip_values.append(rmsip_data)
+        rmsip_values[name] = rmsip_data
 
-    import matplotlib.pyplot as plt
+    # Define the file name
+    file_name = args.outputCSV
+
+    # Create a CSV writer object
+    with open(file_name, mode='w', newline='') as file:
+        writer = csv.writer(file)
+
+        # Write the data
+        for name, simulation in simulationlist.items():
+            row = [name] + [rmsip_values[i][j] for j in range(0, len(rmsip_values[name]))]
+            writer.writerow(row)
+
+    print("Cross Q value csv data table saved to:", file_name)
 
     time = 0
     times = []
@@ -97,7 +111,7 @@ def run(args):
 
 def main(args=None):
     parser = argparse.ArgumentParser(
-        description="Calculating Cross-Q/Mutual-Q of pdb files")
+        description="Calculating rmsip of a group of trajectories")
     parser.add_argument("-y", "--pythonlist", help="Simulations list python script")
     parser.add_argument("-c", "--components", help="How many top PCA components to use?", default=10, type=int)
     parser.add_argument("-s", "--interval", help="analysis interval in frames", default=20, type=int)

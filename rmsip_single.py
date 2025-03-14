@@ -88,7 +88,7 @@ def run(args):
 
 def main(args=None):
     parser = argparse.ArgumentParser(
-        description="Calculating Cross-Q/Mutual-Q of pdb files")
+        description="Calculating rmsip of a trajectory")
     parser.add_argument("-p", "--pdb", help="Where is reference pdb?", type=str)
     parser.add_argument("-d", "--dcd", help="Where is trajectory dcd?", type=str)
     parser.add_argument("-c", "--components", help="How many top PCA components to use?", default=10, type=int)
