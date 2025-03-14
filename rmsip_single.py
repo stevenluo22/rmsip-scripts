@@ -3,6 +3,7 @@ import MDAnalysis.analysis.pca as pca
 from MDAnalysis.analysis import align
 import numpy as np
 import argparse
+import csv
 
 def run(args):
     # Select backbone atoms
@@ -59,6 +60,21 @@ def run(args):
         rmsip_data.append(rmsip)
     rmsip_values.append(rmsip_data)
 
+        # Define the file name
+    file_name = args.outputCSV
+
+    # Create a CSV writer object
+    with open(file_name, mode='w', newline='') as file:
+        writer = csv.writer(file)
+
+        # Write the data
+        name = args.name
+        row = [name] + [rmsip_data[i] for i in range(0, len(rmsip_data))]
+        writer.writerow(row)
+
+    if args.addPrint:
+        print("rmsip value csv data table saved to:", file_name)
+
     import matplotlib.pyplot as plt
 
     time = 0
@@ -89,6 +105,7 @@ def run(args):
 def main(args=None):
     parser = argparse.ArgumentParser(
         description="Calculating rmsip of a trajectory")
+    parser.add_argument("-n", "--name", help="Give a name for the simulation", type=str, default="RMSIP data")
     parser.add_argument("-p", "--pdb", help="Where is reference pdb?", type=str)
     parser.add_argument("-d", "--dcd", help="Where is trajectory dcd?", type=str)
     parser.add_argument("-c", "--components", help="How many top PCA components to use?", default=10, type=int)

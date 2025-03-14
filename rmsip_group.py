@@ -82,7 +82,8 @@ def run(args):
             row = [name] + [rmsip_values[i][j] for j in range(0, len(rmsip_values[name]))]
             writer.writerow(row)
 
-    print("Cross Q value csv data table saved to:", file_name)
+    if args.addPrint:
+        print("rmsip value csv data table saved to:", file_name)
 
     time = 0
     times = []
